@@ -53,3 +53,87 @@ func (o *GenerateFromTemplateOK) WriteResponse(rw http.ResponseWriter, producer 
 		panic(err) // let the recovery middleware deal with this
 	}
 }
+
+// GenerateFromTemplateBadRequestCode is the HTTP code returned for type GenerateFromTemplateBadRequest
+const GenerateFromTemplateBadRequestCode int = 400
+
+/*GenerateFromTemplateBadRequest Bad request
+
+swagger:response generateFromTemplateBadRequest
+*/
+type GenerateFromTemplateBadRequest struct {
+
+	/*
+	  In: Body
+	*/
+	Payload string `json:"body,omitempty"`
+}
+
+// NewGenerateFromTemplateBadRequest creates GenerateFromTemplateBadRequest with default headers values
+func NewGenerateFromTemplateBadRequest() *GenerateFromTemplateBadRequest {
+
+	return &GenerateFromTemplateBadRequest{}
+}
+
+// WithPayload adds the payload to the generate from template bad request response
+func (o *GenerateFromTemplateBadRequest) WithPayload(payload string) *GenerateFromTemplateBadRequest {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the generate from template bad request response
+func (o *GenerateFromTemplateBadRequest) SetPayload(payload string) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *GenerateFromTemplateBadRequest) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(400)
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
+	}
+}
+
+// GenerateFromTemplateInternalServerErrorCode is the HTTP code returned for type GenerateFromTemplateInternalServerError
+const GenerateFromTemplateInternalServerErrorCode int = 500
+
+/*GenerateFromTemplateInternalServerError Internal error
+
+swagger:response generateFromTemplateInternalServerError
+*/
+type GenerateFromTemplateInternalServerError struct {
+
+	/*
+	  In: Body
+	*/
+	Payload string `json:"body,omitempty"`
+}
+
+// NewGenerateFromTemplateInternalServerError creates GenerateFromTemplateInternalServerError with default headers values
+func NewGenerateFromTemplateInternalServerError() *GenerateFromTemplateInternalServerError {
+
+	return &GenerateFromTemplateInternalServerError{}
+}
+
+// WithPayload adds the payload to the generate from template internal server error response
+func (o *GenerateFromTemplateInternalServerError) WithPayload(payload string) *GenerateFromTemplateInternalServerError {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the generate from template internal server error response
+func (o *GenerateFromTemplateInternalServerError) SetPayload(payload string) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *GenerateFromTemplateInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(500)
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
+	}
+}

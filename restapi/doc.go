@@ -16,6 +16,7 @@ KATHRA CodeGenerator API permetting generate sources
 
     Produces:
     - application/json
+    - application/octet-stream
 
 swagger:meta
 */

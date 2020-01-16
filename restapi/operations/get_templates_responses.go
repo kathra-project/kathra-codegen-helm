@@ -59,3 +59,45 @@ func (o *GetTemplatesOK) WriteResponse(rw http.ResponseWriter, producer runtime.
 		panic(err) // let the recovery middleware deal with this
 	}
 }
+
+// GetTemplatesInternalServerErrorCode is the HTTP code returned for type GetTemplatesInternalServerError
+const GetTemplatesInternalServerErrorCode int = 500
+
+/*GetTemplatesInternalServerError Internal error
+
+swagger:response getTemplatesInternalServerError
+*/
+type GetTemplatesInternalServerError struct {
+
+	/*
+	  In: Body
+	*/
+	Payload string `json:"body,omitempty"`
+}
+
+// NewGetTemplatesInternalServerError creates GetTemplatesInternalServerError with default headers values
+func NewGetTemplatesInternalServerError() *GetTemplatesInternalServerError {
+
+	return &GetTemplatesInternalServerError{}
+}
+
+// WithPayload adds the payload to the get templates internal server error response
+func (o *GetTemplatesInternalServerError) WithPayload(payload string) *GetTemplatesInternalServerError {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the get templates internal server error response
+func (o *GetTemplatesInternalServerError) SetPayload(payload string) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *GetTemplatesInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(500)
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
+	}
+}

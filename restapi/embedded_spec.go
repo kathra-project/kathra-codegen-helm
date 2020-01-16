@@ -30,8 +30,11 @@ func init() {
   "paths": {
     "/generateFromTemplate": {
       "post": {
-        "produces": [
+        "consumes": [
           "application/json"
+        ],
+        "produces": [
+          "application/octet-stream"
         ],
         "summary": "Generate archive from template",
         "operationId": "generateFromTemplate",
@@ -53,12 +56,27 @@ func init() {
             "schema": {
               "type": "file"
             }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
     },
     "/templates": {
       "get": {
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
         ],
@@ -72,6 +90,12 @@ func init() {
               "items": {
                 "$ref": "#/definitions/CodeGenTemplate"
               }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -188,8 +212,11 @@ func init() {
   "paths": {
     "/generateFromTemplate": {
       "post": {
-        "produces": [
+        "consumes": [
           "application/json"
+        ],
+        "produces": [
+          "application/octet-stream"
         ],
         "summary": "Generate archive from template",
         "operationId": "generateFromTemplate",
@@ -211,12 +238,27 @@ func init() {
             "schema": {
               "type": "file"
             }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
     },
     "/templates": {
       "get": {
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
         ],
@@ -230,6 +272,12 @@ func init() {
               "items": {
                 "$ref": "#/definitions/CodeGenTemplate"
               }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "type": "string"
             }
           }
         }

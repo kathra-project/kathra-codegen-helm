@@ -37,6 +37,7 @@ func NewKathraCodeGeneratorManagerAPI(spec *loads.Document) *KathraCodeGenerator
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
+		BinProducer:         runtime.ByteStreamProducer(),
 		GenerateFromTemplateHandler: GenerateFromTemplateHandlerFunc(func(params GenerateFromTemplateParams) middleware.Responder {
 			return middleware.NotImplemented("operation GenerateFromTemplate has not yet been implemented")
 		}),
@@ -73,6 +74,8 @@ type KathraCodeGeneratorManagerAPI struct {
 
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
+	// BinProducer registers a producer for a "application/octet-stream" mime type
+	BinProducer runtime.Producer
 
 	// GenerateFromTemplateHandler sets the operation handler for the generate from template operation
 	GenerateFromTemplateHandler GenerateFromTemplateHandler
@@ -141,6 +144,10 @@ func (o *KathraCodeGeneratorManagerAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.BinProducer == nil {
+		unregistered = append(unregistered, "BinProducer")
+	}
+
 	if o.GenerateFromTemplateHandler == nil {
 		unregistered = append(unregistered, "GenerateFromTemplateHandler")
 	}
@@ -204,6 +211,9 @@ func (o *KathraCodeGeneratorManagerAPI) ProducersFor(mediaTypes []string) map[st
 
 		case "application/json":
 			result["application/json"] = o.JSONProducer
+
+		case "application/octet-stream":
+			result["application/octet-stream"] = o.BinProducer
 
 		}
 

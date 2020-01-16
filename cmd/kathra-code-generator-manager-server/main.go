@@ -24,7 +24,8 @@ func main() {
 	}
 
 	api := operations.NewKathraCodeGeneratorManagerAPI(swaggerSpec)
-	api.GenerateFromTemplateHandler = controllers.GetTemplates()
+	api.GetTemplatesHandler = controllers.GetTemplates()
+	api.GenerateFromTemplateHandler = controllers.GenerateFromTemplate()
 	server := restapi.NewServer(api)
 	defer server.Shutdown()
 
