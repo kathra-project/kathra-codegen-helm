@@ -11,6 +11,7 @@ import (
 	"path"
 	"regexp"
 	"sort"
+	"strings"
 
 	"github.com/kathra-project/kathra-codegen-helm/models"
 )
@@ -90,7 +91,11 @@ func GenerateFilesFromTemplate(t *models.CodeGenTemplate) (string, error) {
 	var dirWithSrc = dir + "/" + GetValueFromKey(t, "CHART_NAME")
 	Dir("./templates/"+t.Name, dirWithSrc)
 	for _, arg := range t.Arguments {
-		cmd := exec.Command("/bin/bash", "-c", "find "+dirWithSrc+" -type f -exec sed -i -e 's/${"+arg.Key+"}/"+arg.Value+"/g' {} \\;")
+		if (arg.Key == "REGISTRY_HOST") {
+			arg.Value = strings.Replace(arg.Value, "http://", "", -1)
+		}
+
+		cmd := exec.Command("/bin/bash", "-c", "find "+dirWithSrc+" -type f -exec sed -i -e 's|${"+strings.Replace(arg.Key, "|", "\\|", -1)+"}|"+strings.Replace(arg.Value, "|", "\\|", -1)+"|g' {} \\;")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {

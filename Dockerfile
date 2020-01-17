@@ -6,9 +6,10 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main cmd/kathra-code-generator-manager-server/main.go
 
 FROM alpine/helm:3.0.0
-RUN apk --no-cache add ca-certificates bash sed grep gawk
+RUN apk --no-cache add ca-certificates bash sed grep gawk zip
 WORKDIR /root/
 COPY --from=builder /app/main .
+COPY templates templates
 ENV PORT=8080
 ENV HOST=0.0.0.0
 EXPOSE 8080
