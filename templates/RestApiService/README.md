@@ -11,7 +11,7 @@ This chart will deploy rest api service.
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm add repo kathra-repo CHART_MUSEUM_URL --username=MY_LOGIN --password=MY_PASSWORD
+$ helm add repo kathra-repo ${REGISTRY_HOST} --username=MY_LOGIN --password=MY_PASSWORD
 $ helm install --name my-release ${CHART_NAME}
 ```
 

@@ -51,8 +51,9 @@ func GetTemplates() ([]*models.CodeGenTemplate, error) {
 	var appVersion = models.CodeGenTemplateArgument{Key: "APP_VERSION", Value: "", Contrainst: "[0-9]+\\.[0-9]+\\.[0-9]+"}
 	var imageName = models.CodeGenTemplateArgument{Key: "IMAGE_NAME", Value: ".+"}
 	var imageTag = models.CodeGenTemplateArgument{Key: "IMAGE_TAG", Value: ".+"}
+	var imageRegistry = models.CodeGenTemplateArgument{Key: "IMAGE_REGISTRY", Value: ".+"}
 	var registryHost = models.CodeGenTemplateArgument{Key: "REGISTRY_HOST", Value: ".+"}
-	var arguments = []*models.CodeGenTemplateArgument{&chartName, &chartVersion, &chartDescription, &appVersion, &imageName, &imageTag, &registryHost}
+	var arguments = []*models.CodeGenTemplateArgument{&chartName, &chartVersion, &chartDescription, &appVersion, &imageName, &imageTag, &imageRegistry, &registryHost}
 	var restServiceTemplate = models.CodeGenTemplate{Name: "RestApiService", Arguments: arguments}
 
 	var templates = []*models.CodeGenTemplate{}
@@ -91,8 +92,8 @@ func GenerateFilesFromTemplate(t *models.CodeGenTemplate) (string, error) {
 	var dirWithSrc = dir + "/" + GetValueFromKey(t, "CHART_NAME")
 	Dir("./templates/"+t.Name, dirWithSrc)
 	for _, arg := range t.Arguments {
-		if (arg.Key == "REGISTRY_HOST") {
-			arg.Value = strings.Replace(arg.Value, "http://", "", -1)
+		if arg.Key == "IMAGE_REGISTRY" {
+			arg.Value = strings.Replace(strings.Replace(arg.Value, "https://", "", -1), "http://", "", -1)
 		}
 
 		cmd := exec.Command("/bin/bash", "-c", "find "+dirWithSrc+" -type f -exec sed -i -e 's|${"+strings.Replace(arg.Key, "|", "\\|", -1)+"}|"+strings.Replace(arg.Value, "|", "\\|", -1)+"|g' {} \\;")
@@ -104,7 +105,7 @@ func GenerateFilesFromTemplate(t *models.CodeGenTemplate) (string, error) {
 		}
 	}
 	println("Template generated in " + dirWithSrc)
-	cmd := exec.Command("/bin/bash", "-c", "cd "+dirWithSrc+" && zip "+GetValueFromKey(t, "CHART_NAME")+".zip *")
+	cmd := exec.Command("/bin/bash", "-c", "cd "+dirWithSrc+" && zip -r "+GetValueFromKey(t, "CHART_NAME")+".zip *")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {

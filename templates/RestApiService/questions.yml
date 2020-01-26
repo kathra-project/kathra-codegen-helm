@@ -18,7 +18,7 @@ questions:
   show_subquestion_if: false
   subquestions:
   - variable: image.repository
-    default: "${REGISTRY_HOST}/${IMAGE_NAME}"
+    default: "${IMAGE_REGISTRY}/${IMAGE_NAME}"
     description: "${CHART_NAME} image name"
     type: string
     label: ${CHART_NAME} Image Name

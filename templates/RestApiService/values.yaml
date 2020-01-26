@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: ${REGISTRY_HOST}/${IMAGE_NAME}
+  repository: ${IMAGE_REGISTRY}/${IMAGE_NAME}
   tag: ${IMAGE_TAG}
   pullPolicy: Always
 
