@@ -3,3 +3,7 @@ appVersion: "${APP_VERSION}"
 description: ${CHART_DESCRIPTION}
 name: ${CHART_NAME}
 version: ${CHART_VERSION}
+icon: ${ICON_URL}
+sources:
+- ${SOURCE_URL}
+home: ${HOME_URL}
