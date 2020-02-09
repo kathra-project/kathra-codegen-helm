@@ -31,6 +31,9 @@ func GetValueFromKey(t *models.CodeGenTemplate, key string) string {
 	iKey := sort.Search(len(t.Arguments), func(i int) bool {
 		return string(t.Arguments[i].Key) >= key
 	})
+	if (iKey >= len(t.Arguments)) {
+		return ""
+	}
 	return t.Arguments[iKey].Value
 }
 func GetConstraintFromKey(t *models.CodeGenTemplate, key string) string {
@@ -53,7 +56,10 @@ func GetTemplates() ([]*models.CodeGenTemplate, error) {
 	var imageTag = models.CodeGenTemplateArgument{Key: "IMAGE_TAG", Value: ".+"}
 	var imageRegistry = models.CodeGenTemplateArgument{Key: "IMAGE_REGISTRY", Value: ".+"}
 	var registryHost = models.CodeGenTemplateArgument{Key: "REGISTRY_HOST", Value: ".+"}
-	var arguments = []*models.CodeGenTemplateArgument{&chartName, &chartVersion, &chartDescription, &appVersion, &imageName, &imageTag, &imageRegistry, &registryHost}
+	var source = models.CodeGenTemplateArgument{Key: "SOURCE_URL", Value: ".+"}
+	var website = models.CodeGenTemplateArgument{Key: "HOME_URL", Value: ".+"}
+	var icon = models.CodeGenTemplateArgument{Key: "ICON_URL", Value: ".+"}
+	var arguments = []*models.CodeGenTemplateArgument{&chartName, &chartVersion, &chartDescription, &appVersion, &imageName, &imageTag, &imageRegistry, &registryHost, &source, &icon, &website}
 	var restServiceTemplate = models.CodeGenTemplate{Name: "RestApiService", Arguments: arguments}
 
 	var templates = []*models.CodeGenTemplate{}
@@ -89,14 +95,24 @@ func GenerateFilesFromTemplate(t *models.CodeGenTemplate) (string, error) {
 		log.Println(err)
 		return "", err
 	}
+
+	var templateRef *models.CodeGenTemplate
+	var templates, _ = GetTemplates()
+	for _, template := range templates {
+		if template.Name == t.Name {
+			templateRef = template
+		}
+	}
+	var value string
 	var dirWithSrc = dir + "/" + GetValueFromKey(t, "CHART_NAME")
 	Dir("./templates/"+t.Name, dirWithSrc)
-	for _, arg := range t.Arguments {
+	for _, arg := range templateRef.Arguments {
+		value = GetValueFromKey(t, arg.Key)
 		if arg.Key == "IMAGE_REGISTRY" {
-			arg.Value = strings.Replace(strings.Replace(arg.Value, "https://", "", -1), "http://", "", -1)
+			value = strings.Replace(strings.Replace(value, "https://", "", -1), "http://", "", -1)
 		}
 
-		cmd := exec.Command("/bin/bash", "-c", "find "+dirWithSrc+" -type f -exec sed -i -e 's|${"+strings.Replace(arg.Key, "|", "\\|", -1)+"}|"+strings.Replace(arg.Value, "|", "\\|", -1)+"|g' {} \\;")
+		cmd := exec.Command("/bin/bash", "-c", "find "+dirWithSrc+" -type f -exec sed -i -e 's|${"+strings.Replace(arg.Key, "|", "\\|", -1)+"}|"+strings.Replace(value, "|", "\\|", -1)+"|g' {} \\;")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {
