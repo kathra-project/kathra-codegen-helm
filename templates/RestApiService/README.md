@@ -19,7 +19,7 @@ $ helm install --name my-release ${CHART_NAME}
 
 | Parameter                         | Description                          | Default                                   |
 | --------------------------------- | ------------------------------------ | ----------------------------------------- |
-| `image.repository`                    | Image name                    | `${REGISTRY_HOST}/${IMAGE_NAME}`                         |
+| `image.repository`                    | Image name                    | `${IMAGE_REGISTRY}/${IMAGE_NAME}`                         |
 | `image.tag`                      | Image tag                     | `${IMAGE_TAG}`                                     |
 | `ingress.enabled`          | Enable ingress resource             | `false`                                  |
 | `ingress.hosts[0].host`          | Ingress hostname  (if ingress enabled)            | `${CHART_NAME}-example.local`                                  |
